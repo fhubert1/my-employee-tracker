@@ -25,10 +25,10 @@ VALUES
   ('Casey', 'Smith', 2, 1),   -- Pro Shop Sales Rep, managed by Kathryn
 
   ('Theodore', 'Johnson', 3, NULL), -- Grounds Keeper Manager
-  ('Lamar', 'Jackson', 4, 3),     -- Grass cutter, managed by Michael Johnson
+  ('John', 'Harbaugh', 4, 3),     -- Grass cutter, managed by Michael Johnson
 
-  ('Theodore', 'Johnson', 5, NULL), -- Snack Bar Manager
+  ('Bruce', 'Smith', 5, NULL), -- Snack Bar Manager
   ('Lamar', 'Jackson', 6, 5),     -- Snack Bar Rep, managed by Theodore Johnson
 
-  ('Mark', 'Andrews', 5, NULL),     -- HR Manager
-  ('Derrick', 'Henry', 8, 5);        -- HR Assistant, managed by Mark Andrews
+  ('Mark', 'Andrews', 7, NULL),     -- HR Manager
+  ('Derrick', 'Henry', 8, 7);        -- HR Assistant, managed by Mark Andrews
