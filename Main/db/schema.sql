@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS t_ime_db;
+DROP DATABASE IF EXISTS t_time_db;
 CREATE DATABASE t_time_db;
 
 \c t_time_db;

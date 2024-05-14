@@ -7,7 +7,6 @@ const Table = require('cli-table3');
 init();
 
 // display banner 
-
 function init() {
 
     const logoTxt = "T-Time Employee Manager";
@@ -25,6 +24,7 @@ function init() {
 
 }
 
+// loadPrompts that will be displayed on console
 function loadPrompts() {
 
     inquirer.prompt([
@@ -103,7 +103,7 @@ function loadPrompts() {
     });
  }
 
-
+// view departsment - call to database to return all the departments
 async function viewDepartments() {
 
     try {
@@ -114,24 +114,27 @@ async function viewDepartments() {
       const table = new Table({
         head: ['id', 'Department']
       });
+      
+      // push rows on to table
       departments.forEach(dept => {
         table.push([
             dept.id,
             dept.name
         ]);
       })
+      //display pretty print table
       console.table(table.toString());
       
     } catch (error) {
       // Handle any errors
       console.error('Error fetching departments:', error);
     } finally {
-      //db.closeConnection();  
+      // display menu options
       loadPrompts();
     }
 }
 
-// TODO Fix role table to use department instead of department_id
+// display database roles
 async function viewRoles() {
 
     try {
@@ -162,7 +165,7 @@ async function viewRoles() {
     }
 }
 
-
+// display all employees in database
 async function viewEmployees() {
 
     try {
@@ -171,14 +174,16 @@ async function viewEmployees() {
   
       // Log or process the departments as needed
       const table = new Table({
-        head: ['id', 'First Name', 'Last Name', 'Role', 'Manager']
+        head: ['id', 'First Name', 'Last Name', 'Title', 'Department', 'Salary', 'Manager']
       });
       employees.forEach(employee => {
         table.push([
-            employee.id,
+            employee.employee_id,
             employee.first_name,
             employee.last_name,
-            employee.role,
+            employee.title,
+            employee.department,
+            employee.salary,
             employee.manager
         ]);
       });
@@ -291,12 +296,13 @@ async function addEmployee() {
     })
   }
   
+  // update an employee role 
   async function updateEmployeeRole() {
 
     const employees = await db.findAllEmployees();
-    const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+    const employeeChoices = employees.map(({ employee_id, first_name, last_name }) => ({
         name: `${first_name} ${last_name}`,
-        value: id
+        value: employee_id
     }));
   
     const roles = await db.findAllRoles();
@@ -320,8 +326,8 @@ async function addEmployee() {
         }
     ])
     .then(res => {
+        const roleId = res.roleId;  
         const employeeId = res.employeeId;
-        const roleId = res.roleId;
         db.updateEmployeeRole(employeeId, roleId)
           .then(() => console.log(`Updated role for employee id ${employeeId} in the database`))
           .then(() => loadPrompts())
@@ -329,10 +335,12 @@ async function addEmployee() {
   }
 
 //  // Exit the application
-function quit() {
-
-    db.closeConnection();
+//async function quit() {
+function quit() {  
     console.log('Thank you for using T-Time Employee Tracker - Goodbye!');
     process.exit();
 }
 
+module.exports = {
+  loadPrompts  
+};

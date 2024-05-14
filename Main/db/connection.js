@@ -43,7 +43,7 @@ async function findAllRoles() {
 async function findAllEmployees() {
   try {
     // Execute the query to select all departments
-    const { rows } = await pool.query("SELECT employee.id AS id, employee.first_name, employee.last_name, role.title AS role, concat(manager.first_name, ' ', manager.last_name) AS manager FROM employee left join role on role.id = employee.role_id left join employee manager on manager.id = employee.manager_id;");
+    const { rows } = await pool.query("SELECT e.id AS employee_id, e.first_name, e.last_name, r.title, d.name AS department, r.salary,  CONCAT(m.first_name, ' ', m.last_name) AS manager FROM employee e JOIN role r ON e.role_id = r.id JOIN   department d ON r.department_id = d.id LEFT JOIN employee m ON e.manager_id = m.id;");
 
     // Return the rows from the result set
     return rows;
@@ -98,20 +98,6 @@ async function updateEmployeeRole(employeeId, roleId) {
   }
 }
 
-// close the database connection
-async function closeConnection() {
-  try {
-    // Close the database connection
-    await pool.end();
-    console.log('Database connection closed.');
-  } catch (error) {
-    // Handle any errors
-    console.error('Error closing database connection:', error);
-  }
-}
-
-
-
 module.exports = {
   findAllDepartments,
   findAllRoles,
@@ -120,7 +106,6 @@ module.exports = {
   createRole,
   createEmployee,
   updateEmployeeRole,
-  closeConnection
 };
 
 
